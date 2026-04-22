@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Arenal · Bilbao</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --verde: #2d4a2d;
+    --verde-claro: #4a7c59;
+    --arena: #f0e6d0;
+    --crema: #faf6ee;
+    --rojo: #c0392b;
+    --dorado: #b8860b;
+    --gris: #3a3530;
+    --marron: #6b4c35;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--crema);
+    color: var(--gris);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    height: 100vh;
+    min-height: 600px;
+    background: var(--verde);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 3rem 4rem;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(74,124,89,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(184,134,11,0.15) 0%, transparent 50%);
+  }
+
+  .hero-river {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+  }
+
+  /* Animated river waves */
+  .river-svg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0.15;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(240,230,208,0.7);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 14vw, 12rem);
+    line-height: 0.9;
+    color: var(--arena);
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.9s 0.1s ease both;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-title span {
+    display: block;
+    color: var(--dorado);
+    font-size: 0.45em;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-subtitle {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    color: rgba(240,230,208,0.75);
+    font-weight: 300;
+    max-width: 400px;
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    right: 4rem;
+    bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 2;
+    animation: fadeIn 1.2s 0.5s both;
+  }
+
+  .hero-scroll span {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(240,230,208,0.5);
+    writing-mode: vertical-rl;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--dorado), transparent);
+    animation: grow 1.5s 1s ease-out both;
+  }
+
+  /* ── WEATHER STRIP ── */
+  .weather-strip {
+    background: var(--dorado);
+    padding: 0.75rem 4rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+    font-weight: 500;
+    overflow: hidden;
+  }
+
+  .weather-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .weather-icon { font-size: 1.1rem; }
+
+  /* ── NAV ── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--crema);
+    border-bottom: 1px solid rgba(45,74,45,0.15);
+    padding: 0 4rem;
+    display: flex;
+    gap: 0;
+  }
+
+  .nav-btn {
+    padding: 1.1rem 1.8rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gris);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0.6;
+  }
+
+  .nav-btn:hover { opacity: 1; }
+  .nav-btn.active {
+    opacity: 1;
+    border-bottom-color: var(--verde);
+    color: var(--verde);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    display: none;
+    padding: 4rem;
+    animation: fadeIn 0.4s ease;
+  }
+  .section.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid rgba(45,74,45,0.15);
+    padding-bottom: 1.5rem;
+  }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--verde);
+    line-height: 1;
+  }
+
+  .section-header p {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--marron);
+    font-weight: 300;
+    max-width: 500px;
+  }
+
+  /* ── PLACE GRID ── */
+  .place-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .place-card {
+    background: white;
+    border: 1px solid rgba(45,74,45,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+
+  .place-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(45,74,45,0.12);
+  }
+
+  .card-header {
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid rgba(45,74,45,0.08);
+  }
+
+  .card-type {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--verde-claro);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gris);
+    line-height: 1.2;
+  }
+
+  .card-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+  }
+
+  .stars { color: var(--dorado); font-size: 0.9rem; }
+
+  .rating-num {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--gris);
+  }
+
+  .rating-count {
+    font-size: 0.75rem;
+    color: rgba(58,53,48,0.5);
+  }
+
+  .card-body { padding: 1rem 1.5rem 1.5rem; }
+
+  .card-address {
+    font-size: 0.8rem;
+    color: var(--marron);
+    margin-bottom: 0.75rem;
+    display: flex;
+    gap: 0.4rem;
+    align-items: flex-start;
+  }
+
+  .card-hours {
+    font-size: 0.78rem;
+    color: rgba(58,53,48,0.65);
+    line-height: 1.5;
+  }
+
+  .card-review {
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
+    color: rgba(58,53,48,0.7);
+    line-height: 1.5;
+    font-style: italic;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-review::before { content: '"'; }
+  .card-review::after { content: '"'; }
+
+  .card-footer {
+    padding: 0.75rem 1.5rem;
+    background: rgba(45,74,45,0.04);
+    border-top: 1px solid rgba(45,74,45,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .price-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--verde);
+    letter-spacing: 0.05em;
+  }
+
+  .open-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .open-badge.abierto { background: rgba(45,74,45,0.12); color: var(--verde); }
+  .open-badge.cerrado { background: rgba(192,57,43,0.1); color: var(--rojo); }
+  .open-badge.siempre { background: rgba(184,134,11,0.12); color: var(--dorado); }
+
+  /* ── HIGHLIGHTS ── */
+  .highlights {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .highlight-main {
+    background: var(--verde);
+    color: var(--arena);
+    padding: 3rem;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .highlight-main::before {
+    content: 'ARENAL';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem;
+    position: absolute;
+    right: -1rem;
+    bottom: -1rem;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .highlight-main h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .highlight-main p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    opacity: 0.8;
+    font-weight: 300;
+  }
+
+  .highlight-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    background: white;
+    border: 1px solid rgba(45,74,45,0.1);
+    padding: 1.5rem;
+    border-radius: 2px;
+    flex: 1;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--verde);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--marron);
+    margin-top: 0.3rem;
+  }
+
+  /* ── MAP PLACEHOLDER ── */
+  .map-container {
+    background: var(--arena);
+    border: 1px solid rgba(45,74,45,0.15);
+    border-radius: 2px;
+    padding: 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .map-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(45,74,45,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45,74,45,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .map-pin {
+    font-size: 3rem;
+    position: relative;
+    z-index: 2;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  .map-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--verde);
+    position: relative;
+    z-index: 2;
+  }
+
+  .map-sub {
+    font-size: 0.8rem;
+    color: var(--marron);
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── EVENTOS ── */
+  .event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(45,74,45,0.1);
+    border: 1px solid rgba(45,74,45,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .event-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.5rem 2rem;
+    background: white;
+    transition: background 0.2s;
+  }
+
+  .event-item:hover { background: rgba(45,74,45,0.03); }
+
+  .event-date {
+    text-align: center;
+  }
+
+  .event-day {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--verde);
+    line-height: 1;
+  }
+
+  .event-month {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--marron);
+  }
+
+  .event-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gris);
+    margin-bottom: 0.3rem;
+  }
+
+  .event-desc {
+    font-size: 0.8rem;
+    color: rgba(58,53,48,0.6);
+  }
+
+  .event-tag {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    background: rgba(45,74,45,0.1);
+    color: var(--verde);
+  }
+
+  /* ── TIPS ── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .tip-card {
+    background: white;
+    border: 1px solid rgba(45,74,45,0.1);
+    border-radius: 2px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tip-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--verde);
+  }
+
+  .tip-icon { font-size: 1.8rem; margin-bottom: 0.75rem; }
+
+  .tip-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gris);
+    margin-bottom: 0.5rem;
+  }
+
+  .tip-text {
+    font-size: 0.82rem;
+    color: rgba(58,53,48,0.7);
+    line-height: 1.6;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes grow {
+    from { transform: scaleY(0); transform-origin: top; }
+    to { transform: scaleY(1); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--verde);
+    color: rgba(240,230,208,0.6);
+    padding: 2rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  footer strong { color: var(--arena); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero { padding: 2rem; }
+    .nav { padding: 0 1rem; overflow-x: auto; }
+    .nav-btn { padding: 1rem; font-size: 0.72rem; white-space: nowrap; }
+    .section { padding: 2rem 1.5rem; }
+    .weather-strip { padding: 0.6rem 1.5rem; font-size: 0.7rem; gap: 1rem; }
+    .highlights { grid-template-columns: 1fr; }
+    .event-item { grid-template-columns: 60px 1fr; }
+    .event-tag { display: none; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <svg class="river-svg" viewBox="0 0 1440 180" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,90 C240,40 480,140 720,90 C960,40 1200,140 1440,90 L1440,180 L0,180 Z" fill="white"/>
+    <path d="M0,110 C240,60 480,160 720,110 C960,60 1200,160 1440,110 L1440,180 L0,180 Z" fill="white" opacity="0.5"/>
+  </svg>
+  <div class="hero-eyebrow">43°15'N · 2°55'O · Bilbao, Euskadi</div>
+  <h1 class="hero-title">
+    El<br>Arenal
+    <span>Parque · Gastronomía · Cultura</span>
+  </h1>
+  <p class="hero-subtitle">El corazón verde de Bilbao junto al Nervión. Paseos, pintxos, kiosco histórico y la mejor vida de barrio vasca.</p>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- WEATHER STRIP -->
+<div class="weather-strip" id="weatherStrip">
+  <div class="weather-item"><span class="weather-icon">🌤</span> Bilbao — Miércoles 22 Abr 2026</div>
+  <div class="weather-item"><span class="weather-icon">🌡</span> ~15°C</div>
+  <div class="weather-item"><span class="weather-icon">💧</span> Probabilidad de lluvia: moderada</div>
+  <div class="weather-item"><span class="weather-icon">🕙</span> Hora del vermut: 12:00 – 14:00h</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showSection('descubre', this)">Descubre</button>
+  <button class="nav-btn" onclick="showSection('pintxos', this)">Pintxos & Bares</button>
+  <button class="nav-btn" onclick="showSection('restaurantes', this)">Restaurantes</button>
+  <button class="nav-btn" onclick="showSection('lugares', this)">Lugares</button>
+  <button class="nav-btn" onclick="showSection('consejos', this)">Consejos</button>
+</nav>
+
+<!-- DESCUBRE -->
+<section id="descubre" class="section active">
+  <div class="section-header">
+    <h2>El corazón de Bilbao</h2>
+    <p>El Arenal fue originalmente una orilla arenosa del Nervión, transformada en el siglo XIX en el gran espacio cívico de la ciudad.</p>
+  </div>
+
+  <div class="highlights">
+    <div class="highlight-main">
+      <h3>Parque del Arenal</h3>
+      <p>El parque más antiguo de la ciudad a orillas del Nervión. Conecta el frente fluvial, el barrio del teatro y el Casco Viejo. Sus amplios paseos paralelos al río son el escenario favorito para el txikiteo matutino, los mercados de Navidad y los conciertos del Kiosco.</p>
+      <br>
+      <p>Abierto las 24 horas · Entrada gratuita · Valoración: ⭐ 4.6/5 (1.476 reseñas)</p>
+    </div>
+    <div class="highlight-stats">
+      <div class="stat-card">
+        <div class="stat-number">19</div>
+        <div class="stat-label">Siglo de apertura</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">4.6</div>
+        <div class="stat-label">Valoración media</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">24h</div>
+        <div class="stat-label">Acceso libre</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header" style="margin-top: 3rem;">
+    <h2>Eventos del Arenal</h2>
+    <p>El kiosco histórico y el parque acogen conciertos, ferias y celebraciones a lo largo del año.</p>
+  </div>
+
+  <div class="event-list">
+    <div class="event-item">
+      <div class="event-date">
+        <div class="event-day">1</div>
+        <div class="event-month">May</div>
+      </div>
+      <div>
+        <div class="event-name">Fiestas de Mayo · Aste Nagusia</div>
+        <div class="event-desc">Conciertos gratuitos en el kiosco del Arenal · Ambiente festivo toda la semana</div>
+      </div>
+      <div class="event-tag">Gratuito</div>
+    </div>
+    <div class="event-item">
+      <div class="event-date">
+        <div class="event-day">30</div>
+        <div class="event-month">May</div>
+      </div>
+      <div>
+        <div class="event-name">Mercado de Artesanía</div>
+        <div class="event-desc">Productores vascos, txakoli, quesos y artesanía local en el parque</div>
+      </div>
+      <div class="event-tag">Semanal</div>
+    </div>
+    <div class="event-item">
+      <div class="event-date">
+        <div class="event-day">15</div>
+        <div class="event-month">Ago</div>
+      </div>
+      <div>
+        <div class="event-name">Aste Nagusia · Semana Grande</div>
+        <div class="event-desc">La fiesta mayor de Bilbao · El Arenal, epicentro de los fuegos artificiales</div>
+      </div>
+      <div class="event-tag">Agosto</div>
+    </div>
+    <div class="event-item">
+      <div class="event-date">
+        <div class="event-day">8</div>
+        <div class="event-month">Dic</div>
+      </div>
+      <div>
+        <div class="event-name">Mercado de Navidad</div>
+        <div class="event-desc">Luces, belenes y puestos navideños · Valorado como "increíble" por los bilbaínos</div>
+      </div>
+      <div class="event-tag">Navidad</div>
+    </div>
+  </div>
+</section>
+
+<!-- PINTXOS -->
+<section id="pintxos" class="section">
+  <div class="section-header">
+    <h2>Pintxos & Bares</h2>
+    <p>Los mejores bares de pintxos a un paseo del Arenal. El txikiteo es obligatorio.</p>
+  </div>
+  <div class="place-grid" id="pintxosGrid"></div>
+</section>
+
+<!-- RESTAURANTES -->
+<section id="restaurantes" class="section">
+  <div class="section-header">
+    <h2>Restaurantes</h2>
+    <p>Desde cocina de mercado vasca hasta propuestas más creativas, todo cerca del Arenal.</p>
+  </div>
+  <div class="place-grid" id="restaurantesGrid"></div>
+</section>
+
+<!-- LUGARES -->
+<section id="lugares" class="section">
+  <div class="section-header">
+    <h2>Lugares & Puntos de Interés</h2>
+    <p>El parque, el kiosco, el puente del Arenal y más iconos del corazón de Bilbao.</p>
+  </div>
+  <div class="place-grid" id="lugaresGrid"></div>
+  <div style="margin-top: 3rem;">
+    <div class="map-container">
+      <div class="map-grid"></div>
+      <div class="map-pin">📍</div>
+      <div class="map-text">Parque del Arenal · Bilbao</div>
+      <div class="map-sub">43°15'38"N · 2°55'24"O · Casco Viejo, Ibaiondo</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONSEJOS -->
+<section id="consejos" class="section">
+  <div class="section-header">
+    <h2>Consejos para tu visita</h2>
+    <p>Lo que necesitas saber antes de pasear por El Arenal.</p>
+  </div>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-icon">🕙</div>
+      <div class="tip-title">Mejor hora del txikiteo</div>
+      <div class="tip-text">Los pintxos están en su mejor momento entre las 12:00 y las 14:00h y de 19:00 a 21:30h. Llega temprano: los mejores vuelan en minutos.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🌧️</div>
+      <div class="tip-title">¡Es Bilbao!</div>
+      <div class="tip-text">Lleva paraguas o chubasquero. La lluvia es parte del encanto de la ciudad, y los bares son aún más acogedores cuando cae sirimiri.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🍷</div>
+      <div class="tip-title">Txakoli primero</div>
+      <div class="tip-text">Empieza siempre con un txakoli bien frío. El vino blanco vasco efervescente es la bebida oficial del Arenal. Pide que te lo escancien en alto.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">💶</div>
+      <div class="tip-title">Efectivo va bien</div>
+      <div class="tip-text">Muchos bares pequeños prefieren efectivo, aunque casi todos ya aceptan tarjeta. Un pintxo suele costar entre 1,50€ y 3,50€.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🚗</div>
+      <div class="tip-title">Parking del Arenal</div>
+      <div class="tip-text">Hay un gran parking subterráneo justo bajo el parque (PARKIA Arenal). Abierto 24h. Precio orientativo: ~2€/h. Recomendable reservar en festivos.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🎵</div>
+      <div class="tip-title">Kiosco del Arenal</div>
+      <div class="tip-text">El pabellón histórico del parque acoge conciertos gratuitos y eventos culturales. Consulta la agenda del Ayuntamiento de Bilbao para programación actualizada.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🌉</div>
+      <div class="tip-title">Puente del Arenal</div>
+      <div class="tip-text">El puente conecta el Casco Viejo con el Ensanche. Al atardecer ofrece vistas espectaculares del Nervión y es el paso peatonal más fotografiado de Bilbao.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🧒</div>
+      <div class="tip-title">Apto para familias</div>
+      <div class="tip-text">El parque tiene zona de juegos infantil muy popular. Es un espacio muy frecuentado por familias bilbaínas, especialmente los domingos por la mañana.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div><strong>El Arenal · Bilbao</strong></div>
+  <div>Parque del Arenal, 48005 · Casco Viejo, Ibaiondo</div>
+  <div>Datos: Google Places · Abril 2026</div>
+</footer>
+
+<script>
+  const pintxosData = [
+    {
+      name: "Sorginzulo",
+      type: "Bar de Pintxos",
+      rating: 4.5,
+      ratingCount: 3854,
+      address: "Pl. Berria, 12 · Plaza Nueva, Casco Viejo",
+      hours: "Lun–Sáb 9:30–22:30 · Dom 10:00–15:30",
+      review: "Fantastic pintxos experience in Bilbao, right on Plaza Nueva. Small, bustling spot full of energy—people enjoying pintxos, wine, and music.",
+      price: "€€",
+      status: "abierto"
+    },
+    {
+      name: "Gure Toki",
+      type: "Bar de Pintxos",
+      rating: 4.5,
+      ratingCount: 5237,
+      address: "Pl. Berria, 12 · Plaza Nueva, Casco Viejo",
+      hours: "Lun–Mar 10:00–23:00 · Mié cerrado · Jue–Sáb 10:00–23:00 · Dom 10:00–16:00",
+      review: "Best pintxos bar we've been to in Bilbao. The razor clams were absolutely delightful.",
+      price: "€€",
+      status: "abierto"
+    },
+    {
+      name: "El Globo",
+      type: "Café · Bar de Pintxos",
+      rating: 4.5,
+      ratingCount: 12973,
+      address: "Diputazio Kalea, 8 · Abando",
+      hours: "Lun–Jue 9:00–23:00 · Vie 9:00–00:00 · Sáb 11:00–00:00 · Dom 12:00–23:00",
+      review: "My favourite pintxos spot in all of Bilbao. The spider crab is the award winning one to go for.",
+      price: "€€",
+      status: "abierto"
+    },
+    {
+      name: "Bar Santamaría",
+      type: "Bar · Pintxos a la plancha",
+      rating: 4.6,
+      ratingCount: 1832,
+      address: "Andra Maria Kalea, 18 · Casco Viejo",
+      hours: "Lun–Jue 10:00–23:00 · Vie–Sáb 10:00–00:00 · Dom 12:00–16:00",
+      review: "Unassuming bar and pintxos place. Small menu, but the chef can cook. The highlight was the foie, perfectly cooked.",
+      price: "€",
+      status: "abierto"
+    },
+    {
+      name: "Café del Arenal",
+      type: "Café · Pintxos",
+      rating: 3.3,
+      ratingCount: 667,
+      address: "Areatza Kalea, 5 · Arenal",
+      hours: "Lun–Dom 7:00–21:30",
+      review: "Perfect place to stop. Amazing setting and friendly staff. Highly recommend for an espresso, beer, or anything else you'd want.",
+      price: "€",
+      status: "abierto"
+    },
+    {
+      name: "El Arenal Taberna",
+      type: "Bar Vasco",
+      rating: 4.0,
+      ratingCount: 433,
+      address: "Pza. Celestino Mª del Arenal, 8 · Deusto",
+      hours: "Lun–Vie 7:00–00:00 · Sáb–Dom 9:00–00:00",
+      review: "Great atmosphere, lovely staff and super pintxos. The tortilla with aioli and bacon is spectacular.",
+      price: "€",
+      status: "abierto"
+    }
+  ];
+
+  const restaurantesData = [
+    {
+      name: "Restaurante Aura",
+      type: "Cocina Vasca Creativa",
+      rating: 4.8,
+      ratingCount: 618,
+      address: "Dorre Kalea, 7 · Casco Viejo",
+      hours: "Mié–Sáb 13:30–16:00 y 20:00–22:30 · Dom 13:30–16:00 · Lun–Mar cerrado",
+      review: "Had a wonderful experience. The lamb dumplings were a highlight. Chef has clearly turned cooking into an art form.",
+      price: "€€€",
+      status: "abierto"
+    },
+    {
+      name: "Restaurante La Palma",
+      type: "Cocina de Mercado",
+      rating: 4.1,
+      ratingCount: 743,
+      address: "Posta Kalea, 3 · Arenal",
+      hours: "Lun–Jue 7:30–23:30 · Vie–Sáb 7:30–01:30 · Dom 8:00–23:30",
+      review: "An excellent dinner spot, especially for seafood. The grilled shrimp and calamari were the highlights — very fresh, clean flavors.",
+      price: "€€",
+      status: "abierto"
+    },
+    {
+      name: "Tolón-Tolón",
+      type: "Especialidad Txuleta a la brasa",
+      rating: 4.7,
+      ratingCount: 944,
+      address: "Mirasol Kondearen Kalea, 9 · Casco Viejo",
+      hours: "Lun–Jue 13:00–17:30 y 19:30–00:00 · Vie–Sáb 13:00–01:00 · Dom 13:00–00:00",
+      review: "My partner described the steak as the best he has ever tasted. The aged bone-in rib steak from village cow was one of the best steaks I've ever had.",
+      price: "€€€",
+      status: "abierto"
+    }
+  ];
+
+  const lugaresData = [
+    {
+      name: "Parque del Arenal",
+      type: "Parque Histórico",
+      rating: 4.6,
+      ratingCount: 1476,
+      address: "Posta Kalea, 21 · Ibaiondo, 48005 Bilbao",
+      hours: "Abierto 24 horas · Todos los días",
+      review: "Bilbao's oldest riverside park, linking the riverfront, the theatre district, and the Old Town. Originally a sandy riverbank.",
+      price: "Gratuito",
+      status: "siempre"
+    },
+    {
+      name: "Kiosco del Arenal",
+      type: "Monumento · Escenario Cultural",
+      rating: 4.4,
+      ratingCount: 108,
+      address: "Arenal Ibilbidea, 2 · Ibaiondo, 48005 Bilbao",
+      hours: "Consultar programación · Eventos frecuentes",
+      review: "Great place for outdoor events. Great atmosphere. Fantastic views with the river and cityscape behind. Good acoustics.",
+      price: "Variable",
+      status: "siempre"
+    },
+    {
+      name: "Puente del Arenal",
+      type: "Puente Histórico",
+      rating: 4.6,
+      ratingCount: 470,
+      address: "Ibaiondo, 48001 Bilbao · Sobre el Río Nervión",
+      hours: "Abierto 24 horas · Peatonal y vehicular",
+      review: "Road and pedestrian bridge spanning the Nervión, connecting the Old Town and the modern city center. Beautiful view especially in the evening.",
+      price: "Gratuito",
+      status: "siempre"
+    },
+    {
+      name: "Parking PARKIA Arenal",
+      type: "Aparcamiento",
+      rating: 3.9,
+      ratingCount: 3467,
+      address: "Areatzako Pasealekua, 1 · Ibaiondo, 48005 Bilbao",
+      hours: "Abierto 24 horas · Carga eléctrica disponible",
+      review: "Conveniently located, close to the old town (Casco Viejo) below the big Arenal square. Safe neighbourhood.",
+      price: "~2€/h",
+      status: "siempre"
+    }
+  ];
+
+  function renderStars(rating) {
+    const full = Math.floor(rating);
+    const half = rating % 1 >= 0.5 ? 1 : 0;
+    return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(5 - full - half);
+  }
+
+  function createCard(place) {
+    const statusLabel = place.status === 'siempre' ? 'Siempre abierto' :
+                        place.status === 'abierto' ? 'Abierto hoy' : 'Cerrado hoy';
+    return `
+      <div class="place-card">
+        <div class="card-header">
+          <div class="card-type">${place.type}</div>
+          <div class="card-name">${place.name}</div>
+          <div class="card-rating">
+            <span class="stars">${renderStars(place.rating)}</span>
+            <span class="rating-num">${place.rating}</span>
+            <span class="rating-count">(${place.ratingCount.toLocaleString('es-ES')})</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-address">📍 ${place.address}</div>
+          <div class="card-hours">🕐 ${place.hours}</div>
+          <div class="card-review">${place.review}</div>
+        </div>
+        <div class="card-footer">
+          <span class="price-badge">${place.price}</span>
+          <span class="open-badge ${place.status}">${statusLabel}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('pintxosGrid').innerHTML = pintxosData.map(createCard).join('');
+  document.getElementById('restaurantesGrid').innerHTML = restaurantesData.map(createCard).join('');
+  document.getElementById('lugaresGrid').innerHTML = lugaresData.map(createCard).join('');
+
+  function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: document.querySelector('.nav').offsetTop, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
